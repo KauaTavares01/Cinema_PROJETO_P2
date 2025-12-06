@@ -4,18 +4,28 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const salaSchema = z.object({
-  numeroSala: z.string().min(1, 'Número da sala é obrigatório').max(10),
-  capacidade: z.coerce
-    .number({ invalid_type_error: 'Capacidade deve ser número' })
-    .int()
-    .positive('Capacidade deve ser maior que zero')
-    .max(500),
+  numeroSala: z
+    .string()
+    .min(1, 'Número da sala é obrigatório')
+    .max(10, 'Número da sala deve ter no máximo 10 caracteres'),
+  capacidade: z
+    .coerce
+    .number()
+    .int({ message: 'Capacidade deve ser um número inteiro' })
+    .positive({ message: 'Capacidade deve ser maior que zero' })
+    .max(500, { message: 'Capacidade máxima é 500 lugares' }),
 });
 
 export type SalaFormData = z.infer<typeof salaSchema>;
 
+export interface Sala {
+  id: number;
+  numeroSala: string;
+  capacidade: number;
+}
+
 interface SalaFormProps {
-  onSucesso?: (novaSala: any) => void;
+  onSucesso?: (novaSala: Sala) => void;
 }
 
 const SalaForm: React.FC<SalaFormProps> = ({ onSucesso }) => {
@@ -25,7 +35,7 @@ const SalaForm: React.FC<SalaFormProps> = ({ onSucesso }) => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<SalaFormData>({
-    resolver: zodResolver(salaSchema),
+    resolver: zodResolver(salaSchema) as any,
   });
 
   const onSubmit = async (data: SalaFormData) => {
@@ -37,7 +47,7 @@ const SalaForm: React.FC<SalaFormProps> = ({ onSucesso }) => {
       });
       if (!resp.ok) throw new Error('Erro ao cadastrar sala');
 
-      const novaSala = await resp.json();
+      const novaSala: Sala = await resp.json();
       alert('Sala cadastrada com sucesso!');
       reset();
       if (onSucesso) onSucesso(novaSala);
@@ -49,6 +59,7 @@ const SalaForm: React.FC<SalaFormProps> = ({ onSucesso }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="mb-4">
+      {/* NÚMERO DA SALA */}
       <div className="mb-3">
         <label className="form-label">Número da sala</label>
         <input
@@ -60,12 +71,13 @@ const SalaForm: React.FC<SalaFormProps> = ({ onSucesso }) => {
         )}
       </div>
 
+      {/* CAPACIDADE */}
       <div className="mb-3">
         <label className="form-label">Capacidade</label>
         <input
           type="number"
           className={`form-control ${errors.capacidade ? 'is-invalid' : ''}`}
-          {...register('capacidade')}
+          {...register('capacidade', { valueAsNumber: true })}
         />
         {errors.capacidade && (
           <div className="invalid-feedback">{errors.capacidade.message}</div>

@@ -1,53 +1,29 @@
 {
   "filmes": [
     {
-      "id": "1",
-      "titulo": "Filme A",
-      "sinopse": "Sinopse do Filme A",
-      "duracao": 120,
-      "classificacao": "12",
-      "genero": "Ação",
-      "dataExibicao": "2025-12-01"
-    },
-    {
-      "id": "2",
-      "titulo": "Filme B",
-      "sinopse": "Sinopse do Filme B",
-      "duracao": 110,
-      "classificacao": "14",
-      "genero": "Drama",
-      "dataExibicao": "2025-12-02"
-    },
-    {
-      "id": "16a1",
-      "titulo": "TRANSFORMERS",
-      "sinopse": "FILME TRANSFORMERS",
+      "id": "4be2",
+      "titulo": "GENTE GRANDE",
+      "sinopse": "filme gente grande",
       "duracao": 180,
-      "classificacao": "+12",
-      "genero": "AÇÃO",
-      "dataExibicao": "2025-12-06"
+      "classificacao": "14",
+      "genero": "COMEDIA",
+      "dataExibicao": "2025-12-10"
     }
   ],
   "salas": [
     {
-      "id": "3569",
+      "id": "2bf3",
       "numeroSala": "101",
       "capacidade": 50
     }
   ],
   "sessoes": [
     {
-      "id": "1363",
-      "filmeId": "16a1",
-      "salaId": "3569",
-      "dataHora": "2025-12-14T07:01"
-    },
-    {
-      "id": "0051",
-      "filmeId": 1,
-      "salaId": 3569,
-      "dataHora": "2026-01-01T07:00",
-      "preco": 30
+      "id": "102b",
+      "filmeId": null,
+      "salaId": null,
+      "dataHora": "2025-12-06T16:00",
+      "preco": 50
     }
   ],
   "ingressos": []

@@ -13,20 +13,23 @@ interface Sala {
   numeroSala: string;
 }
 
+// 🔹 Schema da sessão
 const sessaoSchema = z.object({
-  filmeId: z.coerce
-    .number({ invalid_type_error: 'Filme é obrigatório' })
-    .int()
-    .positive(),
-  salaId: z.coerce
-    .number({ invalid_type_error: 'Sala é obrigatória' })
-    .int()
-    .positive(),
-  dataHora: z.string().min(1, 'Data e hora são obrigatórias'),
-  preco: z.coerce
-    .number({ invalid_type_error: 'Preço é obrigatório' })
-    .positive('Preço deve ser maior que zero')
-    .max(500),
+  filmeId: z
+    .number({ message: 'Filme é obrigatório' })
+    .int({ message: 'Filme inválido' })
+    .positive({ message: 'Filme é obrigatório' }),
+  salaId: z
+    .number({ message: 'Sala é obrigatória' })
+    .int({ message: 'Sala inválida' })
+    .positive({ message: 'Sala é obrigatória' }),
+  dataHora: z
+    .string()
+    .min(1, 'Data e hora são obrigatórias'),
+  preco: z
+    .number({ message: 'Preço é obrigatório' })
+    .positive({ message: 'Preço deve ser maior que zero' })
+    .max(500, { message: 'Preço máximo permitido é R$ 500,00' }),
 });
 
 export type SessaoFormData = z.infer<typeof sessaoSchema>;
@@ -86,11 +89,12 @@ const SessaoForm: React.FC<SessaoFormProps> = ({ onSucesso }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="mb-4">
+      {/* FILME */}
       <div className="mb-3">
         <label className="form-label">Filme</label>
         <select
           className={`form-control ${errors.filmeId ? 'is-invalid' : ''}`}
-          {...register('filmeId')}
+          {...register('filmeId', { valueAsNumber: true })} // 🔹 converte pra number
         >
           <option value="">Selecione um filme</option>
           {filmes.map((f) => (
@@ -104,11 +108,12 @@ const SessaoForm: React.FC<SessaoFormProps> = ({ onSucesso }) => {
         )}
       </div>
 
+      {/* SALA */}
       <div className="mb-3">
         <label className="form-label">Sala</label>
         <select
           className={`form-control ${errors.salaId ? 'is-invalid' : ''}`}
-          {...register('salaId')}
+          {...register('salaId', { valueAsNumber: true })} // 🔹 converte pra number
         >
           <option value="">Selecione uma sala</option>
           {salas.map((s) => (
@@ -122,6 +127,7 @@ const SessaoForm: React.FC<SessaoFormProps> = ({ onSucesso }) => {
         )}
       </div>
 
+      {/* DATA E HORA */}
       <div className="mb-3">
         <label className="form-label">Data e hora</label>
         <input
@@ -134,13 +140,14 @@ const SessaoForm: React.FC<SessaoFormProps> = ({ onSucesso }) => {
         )}
       </div>
 
+      {/* PREÇO */}
       <div className="mb-3">
         <label className="form-label">Preço (R$)</label>
         <input
           type="number"
           step="0.01"
           className={`form-control ${errors.preco ? 'is-invalid' : ''}`}
-          {...register('preco')}
+          {...register('preco', { valueAsNumber: true })} // 🔹 converte pra number
         />
         {errors.preco && (
           <div className="invalid-feedback">{errors.preco.message}</div>

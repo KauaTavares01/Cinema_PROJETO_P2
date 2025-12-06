@@ -18,7 +18,7 @@ import CadastroFilmes from './pages/CadastroFilmes';
 import AdminDashboard from './pages/AdminDashboard';
 import ClienteDashboard from './pages/ClienteDashboard';
 import ComprarIngresso from './pages/ComprarIngresso';
-import Login from './pages/Login';
+import Login from './contexts/Login';
 
 import ProtectedRoute from './components/ProtectedRoute';
 

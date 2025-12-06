@@ -23,10 +23,11 @@ interface Sala {
   capacidade: number;
 }
 
+// Esquema de validação
 const ingressoSchema = z.object({
   tipo: z.enum(['inteira', 'meia']),
-  quantidade: z.coerce
-    .number({ invalid_type_error: 'Quantidade deve ser um número' })
+  quantidade: z
+    .number({ message: 'Quantidade deve ser um número' })
     .int({ message: 'Quantidade deve ser inteira' })
     .positive({ message: 'Quantidade deve ser maior que zero' })
     .max(20, { message: 'Quantidade máxima por compra é 20' }),
@@ -164,13 +165,13 @@ const ComprarIngresso: React.FC = () => {
             <br />
             <strong>Data/Hora:</strong> {sessao.dataHora}
             <br />
-            <strong>Preço base:</strong> R${' '}
-            {sessao.preco.toFixed(2)}
+            <strong>Preço base:</strong> R$ {sessao.preco.toFixed(2)}
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        {/* TIPO DE INGRESSO */}
         <div className="mb-3">
           <label className="form-label">Tipo de ingresso</label>
           <div>
@@ -205,6 +206,7 @@ const ComprarIngresso: React.FC = () => {
           )}
         </div>
 
+        {/* QUANTIDADE */}
         <div className="mb-3">
           <label className="form-label">Quantidade</label>
           <input
@@ -212,16 +214,18 @@ const ComprarIngresso: React.FC = () => {
             className={`form-control ${
               errors.quantidade ? 'is-invalid' : ''
             }`}
-            {...register('quantidade')}
+            {...register('quantidade', { valueAsNumber: true })} // 🔹 converte para number
             min={1}
             max={20}
           />
           {errors.quantidade && (
             <div className="invalid-feedback">
-              {errors.quantidade.message}</div>
+              {errors.quantidade.message}
+            </div>
           )}
         </div>
 
+        {/* RESUMO */}
         <div className="mb-3">
           <h5>Resumo</h5>
           <p>
